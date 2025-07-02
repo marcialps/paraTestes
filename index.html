@@ -306,7 +306,7 @@
     <h2>Sobre o Projeto</h2>
     <div style="text-align:left; margin: 0 auto; max-width: 340px; font-size:1.08em; color:#333;">
       <p><b>Projeto da Feira de Ciências da Escola CEPP de Ijuí.</b></p>
-      <p><b>Aluna e Desenvolvedora:</b> Isabella Vieira de Siqueira</p>
+      <p><b>Aluna e Desenvolvedora:</b> <span id="reset-isabella">Isabella Vieira de Siqueira</span></p>
       <p><b>Professor Orientador:</b> Luciano </p>
       <p style="margin-top:18px; color:#666;">Junho/2025</p>
     </div>
@@ -625,6 +625,43 @@
       });
     }
     // ====== FIM MOSTRAR RANKING ======
+
+    // Função secreta para resetar o ranking ao clicar 5x em "Isabella"
+    let resetClicks = 0;
+    let resetTimeout = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const isabella = document.getElementById('reset-isabella');
+      if (isabella) {
+        isabella.addEventListener('click', function() {
+          resetClicks++;
+          clearTimeout(resetTimeout);
+          resetTimeout = setTimeout(() => { resetClicks = 0; }, 2000); // 2 segundos para resetar o contador
+
+          if (resetClicks === 5) {
+            resetClicks = 0;
+            if (confirm('Tem certeza que deseja resetar o ranking? Esta ação não pode ser desfeita!')) {
+              // Apaga todos os documentos da coleção 'ranking'
+              db.collection('ranking').get().then(snapshot => {
+                const batch = db.batch();
+                snapshot.forEach(doc => {
+                  batch.delete(doc.ref);
+                });
+                return batch.commit();
+              }).then(() => {
+                alert('Ranking resetado com sucesso!');
+                // Atualiza a tela de ranking se estiver aberta
+                if (!document.getElementById('tela-ranking').classList.contains('oculto')) {
+                  mostrarRanking();
+                }
+              }).catch(err => {
+                alert('Erro ao resetar ranking: ' + err.message);
+              });
+            }
+          }
+        });
+      }
+    });
   </script>
 </body>
 </html>
