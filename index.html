@@ -7,29 +7,43 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Fira+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #4f8cff;
-      --secondary: #f5f7fa;
-      --accent: #ffb347;
+      --primary: #00ff99;
+      --secondary: #101820;
+      --accent: #00bfff;
       --danger: #ff4f4f;
       --success: #4fffa1;
-      --radius: 20px;
-      --shadow: 0 6px 32px rgba(0,0,0,0.10);
+      --radius: 16px;
+      --shadow: 0 6px 32px rgba(0,255,153,0.10);
       --transition: 0.3s cubic-bezier(.4,0,.2,1);
-      --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #f5f7fa 100%);
+      --bg-gradient: linear-gradient(135deg, #101820 0%, #1a2a2a 100%);
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Fira Mono', 'JetBrains Mono', 'Roboto Mono', 'Consolas', monospace;
       background: var(--bg-gradient);
       min-height: 100vh;
+      color: #00ff99;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: background var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Código caindo estilo Matrix */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.25;
     }
     .container {
-      background: #fff;
+      background: rgba(16, 24, 32, 0.98);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 40px 32px 32px 32px;
@@ -41,6 +55,8 @@
       animation: fadeIn 0.7s;
       margin: 24px 0;
       overflow: hidden;
+      border: 1.5px solid #00ff99;
+      z-index: 1;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(40px) scale(0.98);}
@@ -50,6 +66,7 @@
       width: 62px;
       height: 62px;
       margin-bottom: 12px;
+      filter: drop-shadow(0 0 8px #00ff99);
       animation: popIn 1s;
     }
     @keyframes popIn {
@@ -60,37 +77,47 @@
     h1, h2, h3 {
       margin: 0 0 18px 0;
       font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 0.5px;
+      color: #00ff99;
+      letter-spacing: 1.5px;
+      text-shadow: 0 0 8px #00ff99, 0 0 2px #00ff99;
+      font-family: 'Fira Mono', monospace;
+      font-size: 2em;
+      min-height: 2.5em;
     }
     .subtitle {
-      color: #666;
+      color: #00bfff;
       font-size: 1.05em;
       margin-bottom: 24px;
+      text-shadow: 0 0 4px #00bfff;
     }
     button {
-      background: var(--primary);
-      color: #fff;
-      border: none;
+      background: #101820;
+      color: #00ff99;
+      border: 1.5px solid #00ff99;
       border-radius: var(--radius);
       padding: 14px 0;
       width: 100%;
       font-size: 1.1em;
+      font-family: 'Fira Mono', monospace;
       font-weight: 700;
       cursor: pointer;
-      transition: background var(--transition), transform 0.15s;
+      transition: background var(--transition), color var(--transition), box-shadow 0.2s;
       margin: 10px 0;
-      box-shadow: 0 2px 12px rgba(79,140,255,0.11);
+      box-shadow: 0 2px 12px rgba(0,255,153,0.11);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
     }
-    button:hover { background: #2563eb; transform: translateY(-2px) scale(1.02);}
-    .btn-secondary { background: var(--accent); color: #222; }
-    .btn-secondary:hover { background: #ff9800; }
-    .btn-danger { background: var(--danger); }
-    .btn-danger:hover { background: #d32f2f; }
+    button:hover {
+      background: #00ff99;
+      color: #101820;
+      box-shadow: 0 0 16px #00ff99;
+    }
+    .btn-secondary { background: var(--accent); color: #101820; border-color: var(--accent); }
+    .btn-secondary:hover { background: #101820; color: var(--accent); border-color: var(--accent); }
+    .btn-danger { background: var(--danger); color: #fff; border-color: var(--danger); }
+    .btn-danger:hover { background: #101820; color: var(--danger); border-color: var(--danger); }
     .config-group {
       margin: 18px 0;
       text-align: left;
@@ -98,31 +125,33 @@
     .config-group label {
       display: block;
       margin-bottom: 6px;
-      color: #333;
+      color: #00ff99;
       font-weight: 500;
     }
-    .config-group input {
+    .config-group input, .config-group select {
       width: 100%;
       padding: 10px;
       border-radius: 10px;
-      border: 1px solid #ddd;
+      border: 1.5px solid #00ff99;
       margin-bottom: 10px;
       font-size: 1em;
-      background: #f7faff;
+      background: #181f23;
+      color: #00ff99;
+      font-family: 'Fira Mono', monospace;
       transition: border var(--transition);
     }
-    .config-group input:focus {
-      border: 1.5px solid var(--primary);
+    .config-group input:focus, .config-group select:focus {
+      border: 2px solid var(--accent);
       outline: none;
     }
     .alfabeto-memorizacao {
-      font-family: 'Fira Mono', 'JetBrains Mono', 'Roboto Mono', 'Consolas', monospace;
+      font-family: 'Fira Mono', monospace;
       font-size: 1.18em;
-      background: linear-gradient(90deg, #e0e7ff 0%, #f0f4fa 100%);
-      border: 2px solid #4f8cff;
+      background: #101820;
+      border: 2px solid #00ff99;
       border-radius: 18px;
-      box-shadow: 0 2px 20px rgba(79,140,255,0.12);
-      color: #222;
+      box-shadow: 0 2px 20px rgba(0,255,153,0.12);
+      color: #00ff99;
       padding: 26px 14px;
       margin: 28px 0 16px 0;
       letter-spacing: 1.2px;
@@ -133,7 +162,7 @@
       position: relative;
     }
     .alfabeto-memorizacao:hover {
-      box-shadow: 0 6px 36px rgba(79,140,255,0.19);
+      box-shadow: 0 6px 36px rgba(0,255,153,0.19);
       border-color: var(--accent);
     }
     .alternativas {
@@ -145,49 +174,52 @@
     .alternativas button {
       margin: 0;
       font-size: 1.08em;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Fira Mono', monospace;
       font-weight: 500;
       transition: background var(--transition), color var(--transition), transform 0.14s;
     }
     .alternativas button:hover {
       background: var(--success);
-      color: #222;
+      color: #101820;
       transform: scale(1.03);
     }
     .resolucao {
-      background: var(--success);
-      color: #222;
+      background: #181f23;
+      color: #00ff99;
       border-radius: 10px;
       padding: 18px;
       margin-top: 18px;
       font-weight: 500;
       font-size: 1.05em;
       white-space: pre-line;
-      box-shadow: 0 1px 8px rgba(79,255,161,0.09);
+      box-shadow: 0 1px 8px rgba(0,255,153,0.09);
+      border: 1.5px solid #00ff99;
     }
     .oculto { display: none; }
     .progress-bar-bg {
-      background: #e0e7ff;
+      background: #222;
       border-radius: 8px;
       width: 100%;
       height: 16px;
       margin: 12px 0 0 0;
       overflow: hidden;
-      box-shadow: 0 1px 4px rgba(79,140,255,0.09);
+      box-shadow: 0 1px 4px rgba(0,255,153,0.09);
     }
     .progress-bar {
-      background: var(--primary);
+      background: linear-gradient(90deg, #00ff99 0%, #00bfff 100%);
       height: 100%;
       width: 100%;
       transition: width 1s linear;
+      box-shadow: 0 0 8px #00ff99;
     }
     .footer-tip {
-      color: #888;
+      color: #00bfff;
       font-size: 0.98em;
       margin-top: 18px;
       font-style: italic;
       opacity: 0.9;
       letter-spacing: 0.1px;
+      text-shadow: 0 0 4px #00bfff;
     }
     @media (max-width: 600px) {
       .container { padding: 22px 6vw; min-width: unset; }
@@ -428,6 +460,9 @@
         : 'https://img.icons8.com/color/96/cancel--v1.png';
       document.getElementById('resposta-correta').innerHTML = `<b>Resposta correta:</b> ${desafioAtual.frase}`;
       document.getElementById('resolucao').innerHTML = desafioAtual.resolucao + '<br><br>Alfabeto utilizado:<br>' + mostrarAlfabeto(desafioAtual.alfabeto, desafioAtual.frase);
+      if (acertou) {
+        efeitoComemorativoAcerto();
+      }
       if (auth.currentUser) {
         // ====== SALVAR PONTUAÇÃO NO FIRESTORE ======
         // Pontuação conforme o nível
@@ -667,6 +702,150 @@
         });
       }
     });
+
+    function scrambleText(element, text, speed = 30) {
+      let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&';
+      let iterations = 0;
+      let interval = setInterval(() => {
+        element.textContent = text.split('').map((c, i) => {
+          if (i < iterations) return c;
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join('');
+        if (iterations >= text.length) clearInterval(interval);
+        iterations += 1/2;
+      }, speed);
+    }
+
+    // Efeito Matrix (código caindo)
+    function startMatrixEffect() {
+      const canvas = document.getElementById('matrix-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      let letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&';
+      letters = letters.split('');
+      let fontSize = 18;
+      let columns = Math.floor(width / fontSize);
+      let drops = [];
+      for (let x = 0; x < columns; x++) drops[x] = 1;
+      function draw() {
+        ctx.fillStyle = 'rgba(16,24,32,0.15)';
+        ctx.fillRect(0, 0, width, height);
+        ctx.font = fontSize + "px 'Fira Mono', monospace";
+        ctx.fillStyle = '#00ff99';
+        for (let i = 0; i < drops.length; i++) {
+          let text = letters[Math.floor(Math.random() * letters.length)];
+          ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+          if (drops[i] * fontSize > height && Math.random() > 0.975) drops[i] = 0;
+          drops[i]++;
+        }
+      }
+      setInterval(draw, 33);
+      window.addEventListener('resize', () => {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        columns = Math.floor(width / fontSize);
+        drops = [];
+        for (let x = 0; x < columns; x++) drops[x] = 1;
+      });
+    }
+    startMatrixEffect();
+
+    // Efeito de texto embaralhando nos títulos
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('h1, h2').forEach(el => {
+        scrambleText(el, el.textContent, 25);
+      });
+    });
+
+    // Função para animar confetes
+    function startConfetti() {
+      const canvas = document.getElementById('confetti-canvas');
+      if (!canvas) return;
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      canvas.style.display = 'block';
+      let ctx = canvas.getContext('2d');
+      let confetti = [];
+      let colors = ['#00ff99', '#00bfff', '#fff', '#ffb347', '#ff4f4f', '#4fffa1'];
+      for (let i = 0; i < 120; i++) {
+        confetti.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          r: Math.random() * 6 + 4,
+          d: Math.random() * 80 + 20,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          tilt: Math.random() * 10 - 10,
+          tiltAngleIncremental: (Math.random() * 0.07) + .05,
+          tiltAngle: 0
+        });
+      }
+      let angle = 0;
+      let animationFrame;
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        angle += 0.01;
+        for (let i = 0; i < confetti.length; i++) {
+          let c = confetti[i];
+          c.tiltAngle += c.tiltAngleIncremental;
+          c.y += (Math.cos(angle + c.d) + 1 + c.r / 2) / 2;
+          c.x += Math.sin(angle);
+          c.tilt = Math.sin(c.tiltAngle - (i % 3)) * 15;
+          ctx.beginPath();
+          ctx.lineWidth = c.r;
+          ctx.strokeStyle = c.color;
+          ctx.moveTo(c.x + c.tilt + c.r / 3, c.y);
+          ctx.lineTo(c.x + c.tilt, c.y + c.tilt + 10);
+          ctx.stroke();
+        }
+        animationFrame = requestAnimationFrame(draw);
+      }
+      draw();
+      // Parar confete após 3 segundos
+      setTimeout(() => {
+        cancelAnimationFrame(animationFrame);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.style.display = 'none';
+      }, 3000);
+    }
+
+    // Função para mostrar mascote pixelado pulando
+    function showPixelMascot() {
+      const mascot = document.getElementById('pixel-mascot');
+      if (!mascot) return;
+      mascot.style.display = 'block';
+      mascot.style.animation = 'mascot-jump 1.2s cubic-bezier(.5,-0.5,.5,1.5) 2';
+      setTimeout(() => {
+        mascot.style.display = 'none';
+        mascot.style.animation = '';
+      }, 2400);
+    }
+
+    // Animação CSS para mascote
+    const mascotStyle = document.createElement('style');
+    mascotStyle.innerHTML = `
+    @keyframes mascot-jump {
+      0% { transform: translate(-50%,-60%) scale(1.5);}
+      20% { transform: translate(-50%,-90%) scale(1.7);}
+      40% { transform: translate(-50%,-60%) scale(1.5);}
+      60% { transform: translate(-50%,-90%) scale(1.7);}
+      100% { transform: translate(-50%,-60%) scale(1.5);}
+    }`;
+    document.head.appendChild(mascotStyle);
+
+    // Chame as funções ao acertar
+    function efeitoComemorativoAcerto() {
+      startConfetti();
+      showPixelMascot();
+    }
   </script>
+  <canvas id="matrix-canvas"></canvas>
+  <img id="pixel-mascot" src="https://i.imgur.com/1Q9Z1Zm.gif" alt="Mascote Pixel" style="display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-60%) scale(1.5);z-index:1001;pointer-events:none;"/>
+  <canvas id="confetti-canvas" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1000;pointer-events:none;"></canvas>
 </body>
 </html>
