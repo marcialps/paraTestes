@@ -430,8 +430,13 @@
       document.getElementById('resolucao').innerHTML = desafioAtual.resolucao + '<br><br>Alfabeto utilizado:<br>' + mostrarAlfabeto(desafioAtual.alfabeto, desafioAtual.frase);
       if (auth.currentUser) {
         // ====== SALVAR PONTUAÇÃO NO FIRESTORE ======
-        // 1 ponto por acerto
-        const pontos = acertou ? 1 : 0;
+        // Pontuação conforme o nível
+        let pontos = 0;
+        if (acertou) {
+          if (config.nivel === 'facil') pontos = 1;
+          else if (config.nivel === 'intermediario') pontos = 3;
+          else if (config.nivel === 'dificil') pontos = 10;
+        }
         const user = auth.currentUser;
         db.collection('ranking').doc(user.uid).set({
           nome: user.displayName,
